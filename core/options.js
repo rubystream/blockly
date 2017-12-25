@@ -31,7 +31,7 @@ goog.provide('Blockly.Options');
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
  * @param {!Object} options Dictionary of options.  Specification:
- *   https://developers.google.com/blockly/installation/overview#configuration
+ *   https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
 Blockly.Options = function(options) {
@@ -104,8 +104,14 @@ Blockly.Options = function(options) {
     // 'path' is a deprecated option which has been replaced by 'media'.
     pathToMedia = options['path'] + 'media/';
   }
+  if (options['oneBasedIndex'] === undefined) {
+    var oneBasedIndex = true;
+  } else {
+    var oneBasedIndex = !!options['oneBasedIndex'];
+  }
 
   this.RTL = rtl;
+  this.oneBasedIndex = oneBasedIndex;
   this.collapse = hasCollapse;
   this.comments = hasComments;
   this.disable = hasDisable;
@@ -125,28 +131,26 @@ Blockly.Options = function(options) {
 };
 
 /**
- * @type {Blockly.Workspace} the parent of the current workspace, or null if
- *    there is no parent workspace.
+ * The parent of the current workspace, or null if there is no parent workspace.
+ * @type {Blockly.Workspace}
  **/
 Blockly.Options.prototype.parentWorkspace = null;
 
 /**
  * If set, sets the translation of the workspace to match the scrollbars.
- * No-op if unset.
  */
-Blockly.Options.prototype.setMetrics = function() { return; };
+Blockly.Options.prototype.setMetrics = null;
 
 /**
- * Return an object with the metrics required to size the workspace, or null
- * if unset.
- * @return {Object} Contains size an position metrics, or null.
+ * Return an object with the metrics required to size the workspace.
+ * @return {Object} Contains size and position metrics, or null.
  */
-Blockly.Options.prototype.getMetrics = function() { return null; };
+Blockly.Options.prototype.getMetrics = null;
 
 /**
  * Parse the user-specified zoom options, using reasonable defaults where
  * behaviour is unspecified.  See zoom documentation:
- *   https://developers.google.com/blockly/installation/zoom
+ *   https://developers.google.com/blockly/guides/configure/web/zoom
  * @param {!Object} options Dictionary of options.
  * @return {!Object} A dictionary of normalized options.
  * @private
@@ -190,7 +194,7 @@ Blockly.Options.parseZoomOptions_ = function(options) {
 /**
  * Parse the user-specified grid options, using reasonable defaults where
  * behaviour is unspecified. See grid documentation:
- *   https://developers.google.com/blockly/installation/grid
+ *   https://developers.google.com/blockly/guides/configure/web/grid
  * @param {!Object} options Dictionary of options.
  * @return {!Object} A dictionary of normalized options.
  * @private
